@@ -1,0 +1,60 @@
+function full_02() {
+  
+  var start= (new Date()).getTime();
+ 
+  
+  var files =  DriveApp.getFolderById('رابط الملف الاول').getFiles();
+
+  
+  var blobs = [];
+  var fileBlob = '';
+  var file = '';
+  
+  
+  while(files.hasNext()){
+    
+  
+    file = files.next();
+    fileBlob = file.getBlob();
+      
+    var fileID = file.getId();
+      
+    var type = {
+      title: file.getName(),
+      mimeType: 'image/jpg',
+      parents: [{ id: 'رابط الملف الوسيط'}]
+    };
+    
+    
+    var gdocFile = Drive.Files.insert(type, fileBlob, {ocr: true, ocrLanguage: 'ar' });
+    Drive.Files.remove(fileID);
+    
+    
+    var documentId = gdocFile.getId();
+    var documentName = file.getName();
+    
+    var url = "https://docs.google.com/feeds/download/documents/export/Export?id="+documentId+"&exportFormat=txt";
+    var param = {
+    method      : "get",
+    headers     : {"Authorization": "Bearer " + ScriptApp.getOAuthToken()},
+    muteHttpExceptions:true,
+  };
+    
+    var html = UrlFetchApp.fetch(url,param).getContentText();
+    
+    DriveApp.getFolderById('رابط الملف الذي سيكون به الملفات نصية').createFile(documentName + ".txt", html);
+    Drive.Files.remove(documentId);
+    
+    
+    
+    var now = new Date();
+    if ( now.getTime() - start > 280000 ) {
+    Logger.log("Time up");
+    break;
+    }
+   
+   
+  
+  }
+
+}
