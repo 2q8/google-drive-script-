@@ -1,0 +1,6 @@
+{font-weight: normal;direction: rtl;text-align: justify;}
+div {font-weight: normal;direction: rtl;text-align: justify;}
+p {font-weight: normal;direction: rtl;text-align: justify;}
+span {font-weight: normal;direction: rtl;text-align: justify;}
+
+<spine toc="ncx" page-progression-direction="rtl">
